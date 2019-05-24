@@ -179,19 +179,23 @@ open class SCLAlertView: UIViewController {
           //Horizontal
           /// The subView's horizontal margin.
           public var horizontal: CGFloat = 12
+            
+          public var titleIconTop: CGFloat = 10
         
           public init(titleTop: CGFloat = 30,
                       textViewBottom: CGFloat = 12,
                       buttonSpacing: CGFloat = 10,
                       textFieldSpacing: CGFloat = 15,
                       bottom: CGFloat = 14,
-                      horizontal: CGFloat = 12) {
+                      horizontal: CGFloat = 12,
+                      titleIconTop: CGFloat = 10) {
             self.titleTop = titleTop
             self.textViewBottom = textViewBottom
             self.buttonSpacing = buttonSpacing
             self.textFieldSpacing = textFieldSpacing
             self.bottom = bottom
             self.horizontal = horizontal
+            self.titleIconTop = titleIconTop
           }
         }
 
@@ -303,6 +307,7 @@ open class SCLAlertView: UIViewController {
     var circleBG = UIView(frame:CGRect(x:0, y:0, width:kCircleHeightBackground, height:kCircleHeightBackground))
     var circleView = UIView()
     var circleIconView : UIView?
+    var titleIconImageView: UIImageView?
     var timeout: SCLTimeoutConfiguration?
     var showTimeoutTimer: Timer?
     var timeoutTimer: Timer?
@@ -423,6 +428,11 @@ open class SCLAlertView: UIViewController {
         }
         consumedHeight += (appearance.kTextFieldHeight + textFieldMargin) * CGFloat(inputs.count)
         consumedHeight += appearance.kTextViewdHeight * CGFloat(input.count)
+        
+        if let imageView = titleIconImageView {
+            consumedHeight += (appearance.margin.titleIconTop + imageView.bounds.height)
+        }
+        
         let maxViewTextHeight = maxHeight - consumedHeight
         let viewTextWidth = subViewsWidth
         var viewTextHeight = appearance.kTextHeight
@@ -462,10 +472,21 @@ open class SCLAlertView: UIViewController {
         //adjust Title frame based on circularIcon show/hide flag
 //        let titleOffset : CGFloat = appearance.showCircularIcon ? 0.0 : -12.0
         let titleOffset: CGFloat = 0
+        
+        var offsetForTitleIcon: CGFloat = 0
+        if let imageView = titleIconImageView {
+            let size = imageView.bounds.size
+            imageView.frame.origin = CGPoint(x: (contentView.bounds.width - size.width) / 2.0, y: appearance.margin.titleIconTop)
+            offsetForTitleIcon = appearance.margin.titleIconTop + size.height
+            
+            labelTitle.frame.origin.y = appearance.margin.titleTop + offsetForTitleIcon
+        }
         labelTitle.frame = labelTitle.frame.offsetBy(dx: 0, dy: titleOffset)
         
         // Subtitle
         y = titleActualHeight > 0 ? appearance.margin.titleTop + titleActualHeight + titleOffset : defaultTopOffset
+        y += offsetForTitleIcon
+        
         viewText.frame = CGRect(x:appearance.margin.horizontal, y:y, width: viewTextWidth, height:viewTextHeight)
         // Text fields
         y += viewTextHeight
@@ -798,6 +819,12 @@ open class SCLAlertView: UIViewController {
             iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfQuestion)
         }
         
+        // Title icon image view
+        if let image = iconImage {
+            titleIconImageView = UIImageView(image: image)
+            contentView.addSubview(titleIconImageView!)
+        }
+        
         // Title
         if !title.isEmpty {
             self.labelTitle.text = title
@@ -848,6 +875,7 @@ open class SCLAlertView: UIViewController {
                 circleIconView = UIImageView(image: iconImage!)
             }
         }
+        
         circleView.addSubview(circleIconView!)
         let x = (appearance.kCircleHeight - appearance.kCircleIconHeight) / 2
         circleIconView!.frame = CGRect( x: x, y: x, width: appearance.kCircleIconHeight, height: appearance.kCircleIconHeight)

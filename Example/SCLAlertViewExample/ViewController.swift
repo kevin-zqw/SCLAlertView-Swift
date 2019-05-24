@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showNotice(_ sender: AnyObject) {
-        let appearance = SCLAlertView.SCLAppearance(dynamicAnimatorActive: true)
+        let appearance = SCLAlertView.SCLAppearance(showCircularIcon: false, dynamicAnimatorActive: true)
         _ = SCLAlertView(appearance: appearance).showNotice(kNoticeTitle, subTitle: kSubtitle)
     }
     
@@ -62,7 +62,8 @@ class ViewController: UIViewController {
 	@IBAction func showEdit(_ sender: AnyObject) {
         let appearance = SCLAlertView.SCLAppearance(
           kTextFieldHeight: 60,
-          showCloseButton: true
+          showCloseButton: true,
+          showCircularIcon: false
         )
         let alert = SCLAlertView(appearance: appearance)
 		let txt = alert.addTextField("Enter your name")
@@ -74,7 +75,8 @@ class ViewController: UIViewController {
     
     @IBAction func showWait(_ sender: AnyObject) {
         let appearance = SCLAlertView.SCLAppearance(
-            showCloseButton: false
+            showCloseButton: false,
+            showCircularIcon: false
         )
         
         let alert = SCLAlertView(appearance: appearance).showWait("Download", subTitle: "Processing...", closeButtonTitle: nil, timeout: nil, colorStyle: nil, colorTextButton: 0xFFFFFF, circleIconImage: nil, animationStyle: SCLAnimationStyle.topToBottom)
@@ -111,6 +113,7 @@ class ViewController: UIViewController {
             kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
             kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
             showCloseButton: false,
+            showCircularIcon: false,
             dynamicAnimatorActive: true
         )
         
@@ -167,6 +170,7 @@ class ViewController: UIViewController {
             kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
             kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
             showCloseButton: false,
+            showCircularIcon: false,
             dynamicAnimatorActive: true,
             buttonsLayout: .horizontal
         )
@@ -191,6 +195,7 @@ class ViewController: UIViewController {
       kTitleFont: UIFont(name: "HelveticaNeue", size: 20)!,
       kTextFont: UIFont(name: "HelveticaNeue", size: 14)!,
       kButtonFont: UIFont(name: "HelveticaNeue-Bold", size: 14)!,
+      showCircularIcon: false,
       shouldAutoDismiss: true,
       margin: margin
     )
